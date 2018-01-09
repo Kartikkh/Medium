@@ -1,5 +1,2 @@
 package controllers
 
-func main() {
-
-}
