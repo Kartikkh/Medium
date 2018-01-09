@@ -2,17 +2,17 @@ package main
 
 import (
 	"net/http"
-	"log"
 	"fmt"
 	"os"
 	"github.com/julienschmidt/httprouter"
 	//"github.com/kartikkh/Medium/controllers"
 	//"github.com/kartikkh/Medium/models"
+	"github.com/sirupsen/logrus"
 	"github.com/joho/godotenv"
 	"gopkg.in/mgo.v2"
 	"github.com/kartikkh/Medium/config"
+    "github.com/mattn/go-colorable"
 )
-
 
 func Init(){
 
@@ -20,38 +20,41 @@ func Init(){
 	dbpassword := os.Getenv("dbPassword")
 	dbAddr := "mongodb://" + dbuser + ":" + dbpassword + "@ds163745.mlab.com:63745/medium"
 
-	session, err := mgo.Dial(dbAddr)
+	_, err := mgo.Dial(dbAddr)
 	if err != nil {
-		log.Fatal("Error connecting DataBase")
+		logrus.Fatal("Error connecting DataBase")
 	}
 }
 
-
 func main() {
+
+	logrus.SetFormatter(&logrus.TextFormatter{ForceColors: true})
+	logrus.SetOutput(colorable.NewColorableStdout())
+
+	logrus.Info("succeeded")
+	logrus.Warn("not correct")
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		logrus.Fatal("Error loading .env file")
 	}
 
-
-	//logger := log.New(os.Stdout,"",1)
-
 	Init()
-
 	r := httprouter.New()
 
 	r.GET("/test", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		fmt.Fprint(w, "Welcome!\n")
+		fmt.Fprint(w, "Welcome kartik!\n")
 	})
 
 
 
-
+	logrus.Info("Starting Server on http://localhost:", os.Getenv("port"))
 	error := http.ListenAndServe(config.LoadConfig().Host+ ":" + config.LoadConfig().Port, r)
 	if error != nil {
-		log.Fatal("Error Connectiong to Server ! ")
+		logrus.Fatal("Error Connecting to Server ! ")
 	}
+
+
 
 
 }
