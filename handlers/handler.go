@@ -1,8 +1,10 @@
 package handlers
 
+
 import (
 	"gopkg.in/mgo.v2"
 	"net/http"
+	"github.com/kartikkh/Medium/controllers"
 )
 
 type Handler struct {
@@ -15,6 +17,7 @@ func NewHandler(s *mgo.Session) *Handler {
 
 
 func (h *Handler) UsersHandler(w http.ResponseWriter, r *http.Request) {
+
 
 	switch r.Method {
 	case "POST":
@@ -35,10 +38,24 @@ func (h *Handler) UsersHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
-
+	user := controllers.Controller(h.session)
 	switch r.Method {
 	case "POST":
-	//	h.LoginUser(w, r)
+		user.Login(w,r)
+	default:
+		http.NotFound(w, r)
+	}
+}
+
+
+
+
+
+func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	user := controllers.Controller(h.session)
+	switch r.Method {
+	case "POST":
+		user.Register(w, r)
 	default:
 		http.NotFound(w, r)
 	}
