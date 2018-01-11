@@ -17,7 +17,7 @@ func NewHandler(s *mgo.Session) *Handler {
 
 
 func (h *Handler) UsersHandler(w http.ResponseWriter, r *http.Request) {
-
+	user := controllers.Controller(h.session)
 
 	switch r.Method {
 	case "POST":
@@ -26,10 +26,13 @@ func (h *Handler) UsersHandler(w http.ResponseWriter, r *http.Request) {
 		// TODO:
 		// Check auth
 		// Get current users
+		user.GetCurrentUser(w,r)
 	case "PUT":
 		// TODO:
 		// Check auth
 		// Update user
+		user.UpdateUser(w,r)
+
 	default:
 		http.NotFound(w, r)
 	}

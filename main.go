@@ -44,9 +44,9 @@ func main() {
 
 	h := handlers.NewHandler(getDatabase())
 
-    http.HandleFunc("/user" ,h.UsersHandler )
-	http.HandleFunc("/login", h.LoginHandler)
-	http.HandleFunc("/register", h.RegisterHandler)
+    http.HandleFunc("/api/user" ,h.UsersHandler )
+	http.HandleFunc("/api/users/login", h.LoginHandler)
+	http.HandleFunc("/api/users", h.RegisterHandler)
 
 	logrus.Info("Starting Server on http://localhost:", os.Getenv("port"))
 
