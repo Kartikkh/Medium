@@ -35,6 +35,7 @@ func Controller(s *mgo.Session) *UserController {
 
 
 func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
+
 	body := struct {
 		User struct {
 			Username string `json:"username"`
@@ -83,7 +84,6 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 
 }
-
 
 
 
