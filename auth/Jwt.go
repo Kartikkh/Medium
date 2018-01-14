@@ -31,7 +31,7 @@ func NewClaims(claims jwt.StandardClaims, username string) *Claims {
 }
 
 // Create a Auth Token
-func GetToken(username string) (string, error){
+func GetToken(username string) (string){
 	claims := NewClaims(jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 		Issuer:    "Medium",
@@ -40,12 +40,9 @@ func GetToken(username string) (string, error){
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Sign and get the complete encoded token as a string using the secret
-	tokenString, err := token.SignedString(secret)
-	if err !=nil{
-		return  string(nil) , err
-	}
-	fmt.Println(tokenString, err)
-	return tokenString, nil
+	tokenString, _ := token.SignedString(secret)
+
+	return tokenString
 
 }
 

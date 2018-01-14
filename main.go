@@ -3,29 +3,21 @@ package main
 import (
 	"net/http"
 	"os"
-	//"github.com/kartikkh/Medium/controllers"
 	"github.com/kartikkh/Medium/handlers"
 	"github.com/sirupsen/logrus"
 	"github.com/joho/godotenv"
-	"gopkg.in/mgo.v2"
 	"github.com/kartikkh/Medium/config"
     "github.com/mattn/go-colorable"
+    "github.com/kartikkh/Medium/models"
 )
 
-func getDatabase() *mgo.Session{
 
-	dbuser := os.Getenv("dbUser")
-	dbpassword := os.Getenv("dbPassword")
-	dbAddr := "mongodb://" + dbuser + ":" + dbpassword + "@ds163745.mlab.com:63745/medium"
+const (
+	DATABASE string = "medium"
+	DIALECT  string = "mysql"
+)
 
-	session , err := mgo.Dial(dbAddr)
 
-	if err != nil {
-		logrus.Fatal("Error connecting DataBase")
-	}
-	return session
-
-}
 
 func main() {
 
@@ -40,9 +32,14 @@ func main() {
 		logrus.Fatal("Error loading .env file")
 	}
 
+	db, err := models.NewDB(DIALECT, DATABASE)
 
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	db.InitSchema()
 
-	h := handlers.NewHandler(getDatabase())
+	h := handlers.NewHandler(db)
 
     http.HandleFunc("/api/user" ,h.UsersHandler )
 	http.HandleFunc("/api/users/login", h.LoginHandler)
@@ -55,8 +52,5 @@ func main() {
 	if error != nil {
 		logrus.Fatal("Error Connecting to Server ! ")
 	}
-
-
-
 
 }

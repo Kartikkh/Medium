@@ -1,13 +1,12 @@
 package controllers
 
 import (
-	"gopkg.in/mgo.v2"
 	"net/http"
 	"encoding/json"
 	"fmt"
 	"github.com/kartikkh/Medium/models"
 	"github.com/sirupsen/logrus"
-
+	"github.com/kartikkh/Medium/auth"
 )
 
 
@@ -25,12 +24,12 @@ type UserJSON struct {
 
 
 type UserController struct {
-	session *mgo.Session
+	DB    *models.DB
 }
 
 
-func Controller(s *mgo.Session) *UserController {
-	return &UserController{s}
+func Controller(db *models.DB) *UserController {
+	return &UserController{db}
 }
 
 
@@ -65,13 +64,13 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 
 
 	//Change Database
-	DbError := uc.session.DB("medium").C("users").Insert(m)
+	//DbError := uc.session.DB("medium").C("users").Insert(m)
 
-	if DbError != nil{
-		logrus.Info(err)
-		http.Error(w, DbError.Error(), http.StatusUnprocessableEntity)
-		return
-	}
+	//if DbError != nil{
+	//	logrus.Info(err)
+	//	//http.Error(w, DbError.Error(), http.StatusUnprocessableEntity)
+	//	return
+	//}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated) // 201
@@ -79,6 +78,7 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 		&User{
 			Username: m.Username,
 			Email:    m.Email,
+			Token : auth.GetToken(m.Username),
 		},
 	}
 	json.NewEncoder(w).Encode(res)
