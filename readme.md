@@ -13,11 +13,6 @@ We've gone to great lengths to adhere to the **Go** community styleguides & best
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 
-# How it works
-
-    TODO
-
-> Describe the general architecture of your app here
 
 # Getting started
 
@@ -29,6 +24,20 @@ For more information on how to this works with other frontends/backends, head ov
 ```
 go get github.com/kartikkh/Medium
 cd $GOPATH/src/github.com/kartikkh/Medium
+```
+
+### Setting up the Database 
+- Since project has been using  [GORM](http://jinzhu.me/gorm/)  
+- Install listed Database from [Here](http://jinzhu.me/gorm/database.html) onto your System
+- Configure the Database onto your System
+
+### Setting up Environment Variable
+Create a .env file in root directory and add 
+```sh
+dbUser = 'DatabaseUsername'
+dbPassword = 'DatabasePassword'
+JWT_SECRET = SUPERSECRETKEY
+port = 3000
 ```
 
 ### Building and Running

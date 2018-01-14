@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var secret = []byte(os.Getenv("JWT_SECRET"))
+var secret = []byte(os.Getenv("Jwt_Secret"))
 
 
 
