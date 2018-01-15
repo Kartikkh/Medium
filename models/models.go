@@ -4,13 +4,8 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"os"
+
 )
-
-
-
-type Datastorer interface {
-	InitSchema()
-}
 
 type DB struct {
 	*gorm.DB

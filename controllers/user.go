@@ -62,15 +62,13 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
-	//Change Database
-	//DbError := uc.session.DB("medium").C("users").Insert(m)
-
-	//if DbError != nil{
-	//	logrus.Info(err)
-	//	//http.Error(w, DbError.Error(), http.StatusUnprocessableEntity)
-	//	return
-	//}
+	err = uc.DB.CreateUser(m)
+	if err != nil {
+		logrus.Error(err)
+		// TODO: Error JSON
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated) // 201
