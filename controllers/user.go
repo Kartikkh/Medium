@@ -65,7 +65,6 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 	err = uc.DB.CreateUser(m)
 	if err != nil {
 		logrus.Error(err)
-		// TODO: Error JSON
 		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
@@ -86,9 +85,45 @@ func (uc *UserController) Register(w http.ResponseWriter, r *http.Request) {
 
 
 func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
+	body := struct {
+		User struct {
+			Email    string `json:"email"`
+			Password string `json:"password"`
+		} `json:"user"`
+	}{}
+	defer r.Body.Close()
+	u := &body.User
+	err := json.NewDecoder(r.Body).Decode(&body)
 
 
+	if err != nil {
+		logrus.Info(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 
+	m, err := uc.DB.FindUserByEmail(u.Email)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
+
+	match := m.MatchPassword(u.Password)
+	if !match {
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
+
+	res := &UserJSON{
+		&User{
+			Username: m.Username,
+			Email:    m.Email,
+			Token:   auth.GetToken(m.Username),
+			Bio:      m.Bio,
+			Image:    m.Image,
+		},
+	}
+	json.NewEncoder(w).Encode(res)
 }
 
 

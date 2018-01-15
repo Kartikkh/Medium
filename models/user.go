@@ -38,15 +38,30 @@ func (db *DB) CreateUser(user *User) error {
 
 	db.Find(&u, "email = ?", user.Email)
 	if u != (User{}) {
-		return fmt.Errorf("Email already exisits")
+		return fmt.Errorf("email already exits")
 	}
 
 	db.Find(&u, "username = ?", user.Username)
 	if u != (User{}) {
-		return fmt.Errorf("Username already exisits")
+		return fmt.Errorf("username already exits")
 	}
 
 	db.Create(user)
 
 	return nil
+}
+
+
+func (db *DB) FindUserByEmail(email string) (*User, error) {
+	u := User{}
+	db.Find(&u, "email = ?", email)
+	if u == (User{}) {
+		return nil, fmt.Errorf("No user found with userame: ", email)
+	}
+	return &u, nil
+}
+
+func (u *User) MatchPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	return err == nil
 }
