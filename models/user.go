@@ -65,3 +65,12 @@ func (u *User) MatchPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	return err == nil
 }
+
+func (db *DB) FindUserByUserName(username string) (*User, error) {
+	u := User{}
+	db.Find(&u, "username = ?", username)
+	if u == (User{}) {
+		return nil, fmt.Errorf("No user found with userame: ", username)
+	}
+	return &u, nil
+}
