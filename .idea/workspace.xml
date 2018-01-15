@@ -4,12 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/main.go" line="7" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f64cadf3-3fc4-4617-93ca-6136c7840ad0" name="Default" comment="Gorm Register Completed !">
+    <list default="true" id="f64cadf3-3fc4-4617-93ca-6136c7840ad0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/controllers/user.go" afterPath="$PROJECT_DIR$/controllers/user.go" />
-      <change beforePath="$PROJECT_DIR$/handlers/handler.go" afterPath="$PROJECT_DIR$/handlers/handler.go" />
-      <change beforePath="$PROJECT_DIR$/models/models.go" afterPath="$PROJECT_DIR$/models/models.go" />
-      <change beforePath="$PROJECT_DIR$/models/user.go" afterPath="$PROJECT_DIR$/models/user.go" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
