@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"github.com/kartikkh/Medium/controllers"
 	"github.com/kartikkh/Medium/models"
-
 )
 
 type Handler struct {
@@ -26,13 +25,9 @@ func (h *Handler) UsersHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "GET":
 		// TODO:
-		// Check auth
-		// Get current users
 		user.GetCurrentUser(w,r)
 	case "PUT":
 		// TODO:
-		// Check auth
-		// Update user
 		user.UpdateUser(w,r)
 
 	default:
