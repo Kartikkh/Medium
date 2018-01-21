@@ -21,7 +21,7 @@ func (h *Handler) ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	router.AddRoute(`profiles\/(?P<username>[0-9a-zA-Z\-]+)$`,"GET", h.getCurrentUser(user.GetProfile))
 	router.AddRoute(`profiles\/(?P<username>[0-9a-zA-Z\-]+)\/follow`,"POST", h.getCurrentUser(user.FollowUser))
 	router.AddRoute(`profiles\/(?P<username>[0-9a-zA-Z\-]+)\/follow`,"DELETE", h.getCurrentUser(user.UnfollowUser))
-
+	router.ServeHTTP(w, r)
 
 }
 
