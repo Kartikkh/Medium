@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"github.com/kartikkh/Medium/controllers"
 	"github.com/kartikkh/Medium/models"
+
 )
 
 type Handler struct {
@@ -48,9 +49,6 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-
-
-
 func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	user := controllers.Controller(h.DB)
 	switch r.Method {
@@ -60,3 +58,4 @@ func (h *Handler) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 }
+

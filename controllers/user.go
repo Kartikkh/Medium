@@ -204,20 +204,7 @@ func (uc *UserController) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if u.Email != ""{
 		m.Email = u.Email
 	}
-
 	uc.DB.Save(&m)
-
-
-	//updateErr := uc.DB.Model(&User{}).Updates(map[string]interface{}{"username":u.Username,"email":u.Email,"password":u.Password,
-	//"image":u.Image,"bio":u.Bio}).Error
-	//if updateErr!=nil{
-	//	logrus.Error("UpdateError in User Controller:")
-	//	logrus.Fatal(updateErr)
-	//}else{
-	//	 	uc.DB.Model(&User{}).Updates(map[string]interface{}{"username":u.Username,"email":u.Email,"password":u.Password,
-	//		"image":u.Image,"bio":u.Bio})
-	//}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
