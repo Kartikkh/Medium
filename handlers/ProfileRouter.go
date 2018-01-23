@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"context"
 	"regexp"
+
 )
 
 type contextKey string
@@ -65,9 +66,13 @@ func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 
 func buildContext(pattern string, r *http.Request) context.Context {
-	re := regexp.MustCompile(pattern)
-	n1 := re.SubexpNames()
-	r2 := re.FindAllStringSubmatch(r.URL.Path, -1)
+	re := regexp.MustCompile(pattern) // "profiles\\/(?P<username>[0-9a-zA-Z\\-]+)$"
+
+	n1 := re.SubexpNames()  //["","username"]
+	//fmt.Printf("%q\n", re.SubexpNames())
+	r2 := re.FindAllStringSubmatch(r.URL.Path, -1) //[["profiles/kartik" "kartik"]]
+	//fmt.Printf("%q\n", r2)
+	//fmt.Printf("%d\n", len(r2))
 
 	ctx := r.Context()
 

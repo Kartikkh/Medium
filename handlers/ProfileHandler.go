@@ -5,12 +5,13 @@ import (
 	"context"
 	"github.com/kartikkh/Medium/controllers"
 	"github.com/kartikkh/Medium/models"
+	"fmt"
+	"github.com/kartikkh/Medium/auth"
 )
 
 
 const (
 	CurrentUser    = contextKey("current_user")
-	FetchedArticle = contextKey("article")
 	Claim          = contextKey("claim")
 )
 
@@ -27,22 +28,22 @@ func (h *Handler) ProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) getCurrentUser(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//var err error
+		var err error
 		var u = &models.User{}
 		ctx := r.Context()
 
-		//if claim, _ := auth.CheckRequest(r); claim != nil {
-		//	// Check also that user exists and prevent old token usage
-		//	// to gain privillege access.
-		//	if u, err = h.DB.FindUserByUsername(claim.Username); err != nil {
-		//		http.Error(w, fmt.Sprint("User with username", claim.Username, "doesn't exist !"), http.StatusUnauthorized)
-		//		return
-		//	}
-		//	ctx = context.WithValue(ctx, Claim, claim)
-		//}
+		if claim, _ := auth.CheckRequest(r); claim != nil {
+			if u, err = h.DB.FindUserByUserName(claim.Username); err != nil {
+				http.Error(w, fmt.Sprint("User with username", claim.Username, "doesn't exist !"), http.StatusUnauthorized)
+				return
+			}
+			fmt.Printf("%q\n", claim)
+			ctx = context.WithValue(ctx, "claim", claim)
+			fmt.Printf("%q\n", ctx)
+		}
 
-		ctx = context.WithValue(ctx, CurrentUser, u)
-
+		ctx = context.WithValue(ctx, "current_user", u)
+	//	fmt.Printf("%q\n", "djshfksdhf")
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	}

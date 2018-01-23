@@ -4,16 +4,19 @@ import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"time"
+
 )
 
 type User struct {
-	ID        int
-	CreatedAt time.Time
-	Username  string
-	Email     string
-	Password  string
-	Bio       string
-	Image     string
+	ID         int
+	CreatedAt  time.Time
+	Username   string
+	Email      string
+	Password   string
+	Bio        string
+	Image      string
+	Following  []User
+
 }
 
 func EncryptPassword(password string) string {
@@ -34,15 +37,16 @@ func NewUser(email, username, password string) (*User, error) {
 }
 
 func (db *DB) CreateUser(user *User) error {
+
 	u := User{}
 
 	db.Find(&u, "email = ?", user.Email)
-	if u != (User{}) {
+	if u.Email != "" {
 		return fmt.Errorf("email already exits")
 	}
 
 	db.Find(&u, "username = ?", user.Username)
-	if u != (User{}) {
+	if u.Username != ""  {
 		return fmt.Errorf("username already exits")
 	}
 
@@ -55,8 +59,8 @@ func (db *DB) CreateUser(user *User) error {
 func (db *DB) FindUserByEmail(email string) (*User, error) {
 	u := User{}
 	db.Find(&u, "email = ?", email)
-	if u == (User{}) {
-		return nil, fmt.Errorf("No user found with userame: ", email)
+	if u.Email == "" {
+		return nil, fmt.Errorf("No user found with email: ", email)
 	}
 	return &u, nil
 }
@@ -69,8 +73,21 @@ func (u *User) MatchPassword(password string) bool {
 func (db *DB) FindUserByUserName(username string) (*User, error) {
 	u := User{}
 	db.Find(&u, "username = ?", username)
-	if u == (User{}) {
+	if u.Username ==  "" {
 		return nil, fmt.Errorf("No user found with userame: ", username)
 	}
 	return &u, nil
 }
+
+
+func (db *DB) IsFollowing( userCheck *User, LoginUser *User) bool  {
+	userPr := &User{}
+	for  _ , userPr =  range LoginUser.Following {
+		if userPr.Username == userCheck.Username {
+			return true
+		}
+	}
+
+	return false
+}
+
